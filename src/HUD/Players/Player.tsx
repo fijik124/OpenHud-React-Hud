@@ -5,7 +5,6 @@ import Armor from "./../Indicators/Armor";
 import Bomb from "./../Indicators/Bomb";
 import Defuse from "./../Indicators/Defuse";
 import React from "react";
-import { RoundKills } from "../Indicators/RoundKills";
 import { Kills, Skull } from "../../assets/Icons";
 
 interface IProps {
@@ -94,8 +93,7 @@ const Player = ({ player, isObserved }: IProps) => {
     weapons.filter((weapon) => weapon.type === "Pistol")[0] || null;
   const grenades = weapons.filter((weapon) => weapon.type === "Grenade");
   const isLeft = player.team.orientation === "left";
-
-  const zeus = weapons.find((weapon) => weapon.name === "taser");
+  const zeus = weapons.find((weapon) => weapon.name === "taser") || null;
 
   return (
     <div
@@ -104,99 +102,104 @@ const Player = ({ player, isObserved }: IProps) => {
       }`}
     >
       <div className="player_data">
-        {/* <Avatar
-          teamId={player.team.id}
-          steamid={player.steamid}
-          height={57}
-          width={57}
-          showSkull={false}
-          showCam={false}
-          sidePlayer={true}
-          teamSide={player.team.side}
-        /> */}
-        <div className="player_stats">
-          <div className="row">
-            <div
-              className={`hp_bar ${player.state.health <= 20 ? "low" : ""}`}
-              style={{ width: `${player.state.health}%` }}
-            ></div>
-            <div className="health">{player.state.health}</div>
-            <div className="username">
-              <div>
-                {isLeft ? <span>{player.observer_slot}</span> : null}{" "}
-                {player.name}{" "}
-                {!isLeft ? <span>{player.observer_slot}</span> : null}
+        <div className="obs_slot">{player.observer_slot}</div>
+        <div className="top_row">
+          <Avatar
+            teamId={player.team.id}
+            steamid={player.steamid}
+            height={57}
+            width={57}
+            showSkull={false}
+            showCam={false}
+            sidePlayer={true}
+            teamSide={player.team.side}
+          />
+          <div className="username_money">
+            <div className="username">{player.name}</div>
+            <div className="money">${player.state.money}</div>
+          </div>
+          <div className="player-stats">
+            <div className="statistics">
+              <div className="player-kills">
+                <Kills />
+                <div className="stat-value">{player.stats.kills}</div>
               </div>
-              {primary || secondary ? (
-                <Weapon
-                  weapon={primary ? primary.name : secondary.name}
-                  active={
-                    primary
-                      ? primary.state === "active"
-                      : secondary.state === "active"
-                  }
-                />
-              ) : (
-                ""
+              <div className="player-deaths">
+                <Skull />
+                <div className="stat-value">{player.stats.deaths}</div>
+              </div>
+              {player.state.round_kills > 0 && (
+                <div className="roundkills">{player.state.round_kills}</div>
               )}
             </div>
           </div>
-          <div className="row">
-            <div className="middle-row">
-              <div className="armor_and_utility">
-                <Bomb player={player} />
-                <Armor
-                  health={player.state.health}
-                  armor={player.state.armor}
-                  helmet={player.state.helmet}
-                />
-                <Defuse player={player} />
-              </div>
-              {zeus ? (
-                <Weapon
-                  className={`zeus ${player.team.orientation}`}
-                  weapon="taser"
-                  active={zeus.state === "active"}
-                />
-              ) : null}
-              <div className="grenades">
-                {grenades.map((grenade) => [
-                  <Weapon
-                    key={`${grenade.name}-${grenade.state}`}
-                    weapon={grenade.name}
-                    active={grenade.state === "active"}
-                    isGrenade
-                  />,
-                  grenade.ammo_reserve === 2 ? (
-                    <Weapon
-                      key={`${grenade.name}-${grenade.state}-double`}
-                      weapon={grenade.name}
-                      active={false}
-                      isGrenade
-                    />
-                  ) : null,
-                ])}
-              </div>
-            </div>
+          <div className="defuser_bomb">
+            <Bomb player={player} />
+            <Defuse player={player} />
           </div>
-          <div className="row">
-            <div className="player-stats">
-              <div className="money">${player.state.money}</div>
-              <div className="statistics">
-                <div className="player-kills">
-                  <Kills />
-                  <div className="stat-value">{player.stats.kills}</div>
-                </div>
-                <div className="player-deaths">
-                  <Skull />
-                  <div className="stat-value">{player.stats.deaths}</div>
-                </div>
-                <RoundKills player={player} />
-              </div>
-            </div>
-          </div>
-          <div className="active_border"></div>
         </div>
+        <div className="bottom_row">
+          <div className="round_damage">
+            ROUND DMG: {player.state.round_totaldmg}
+          </div>
+          <div
+            className="hp_redbar"
+            style={{ width: `${player.state.health}%` }}
+          />
+          <div
+            className="hp_bar"
+            style={{ width: `${player.state.health}%` }}
+          />
+          <div className="health_armor">
+            <div className="health">
+              {player.state.health > 0 && player.state.health}
+            </div>
+            <Armor
+              health={player.state.health}
+              armor={player.state.armor}
+              helmet={player.state.helmet}
+            />
+          </div>
+          <div className="weapon_utility">
+            <div className="grenades">
+              {grenades.map((grenade) => [
+                <Weapon
+                  key={`${grenade.name}-${grenade.state}`}
+                  weapon={grenade.name}
+                  active={grenade.state === "active"}
+                  isGrenade
+                />,
+                grenade.ammo_reserve === 2 ? (
+                  <Weapon
+                    key={`${grenade.name}-${grenade.state}-double`}
+                    weapon={grenade.name}
+                    active={false}
+                    isGrenade
+                  />
+                ) : null,
+              ])}
+            </div>
+            {primary || secondary || zeus ? (
+              <Weapon
+                weapon={
+                  primary ? primary.name : secondary ? secondary.name : "zeus"
+                }
+                active={
+                  primary
+                    ? primary.state === "active"
+                    : secondary
+                    ? secondary.state === "active"
+                    : zeus
+                    ? zeus.state === "active"
+                    : false
+                }
+              />
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+        <div className="active_border"></div>
       </div>
     </div>
   );

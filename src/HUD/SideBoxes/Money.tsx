@@ -18,24 +18,24 @@ interface Props {
 const Money = ({ side, team, loss, equipment, money, show }: Props) => {
   return (
     <div className={`moneybox ${side} ${team} ${show ? "show" : "hide"}`}>
-      <div className="loss_container">
-        <LossBox side={team} active={(loss - 1400) / 500 >= 4} />
-        <LossBox side={team} active={(loss - 1400) / 500 >= 3} />
-        <LossBox side={team} active={(loss - 1400) / 500 >= 2} />
-        <LossBox side={team} active={(loss - 1400) / 500 >= 1} />
+      <div className="money_container">
+        <div className="title">Team Money</div>
+        <div className="value">${money}</div>
       </div>
       <div className="money_container">
         <div className="title">Loss Bonus</div>
         <div className="value">${loss}</div>
       </div>
-      <div className="money_container">
-        <div className="title">Money</div>
-        <div className="value">${money}</div>
+      <div className="loss_container">
+        <LossBox side={team} active={(loss - 1400) / 500 >= 1} />
+        <LossBox side={team} active={(loss - 1400) / 500 >= 2} />
+        <LossBox side={team} active={(loss - 1400) / 500 >= 3} />
+        <LossBox side={team} active={(loss - 1400) / 500 >= 4} />
       </div>
-      <div className="money_container">
+      {/* <div className="money_container">
         <div className="title">Equip.</div>
         <div className="value">${equipment}</div>
-      </div>
+      </div> */}
     </div>
   );
 };

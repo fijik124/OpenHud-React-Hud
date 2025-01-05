@@ -35,13 +35,12 @@ export interface Timer {
 const getRoundLabel = (mapRound: number) => {
   const round = mapRound + 1;
   if (round <= 24) {
-    return `Round ${round}/24`;
+    return `Round ${round}`;
   }
   const additionalRounds = round - 24;
   const OT = Math.ceil(additionalRounds / 6);
   return `OT ${OT} (${additionalRounds - (OT - 1) * 6}/6)`;
 };
-
 const Matchbar = (props: IProps) => {
   const { bomb, match, map, phase } = props;
   const time = stringToClock(phase.phase_ends_in);

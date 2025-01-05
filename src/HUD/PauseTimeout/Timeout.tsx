@@ -13,8 +13,10 @@ const Timeout = ({ phase, map }: IProps) => {
     <div
       id={`timeout`}
       className={`${
-        time && time > 2 && phase &&
-          (phase.phase === "timeout_t" || phase.phase === "timeout_ct")
+        time &&
+        time > 2 &&
+        phase &&
+        (phase.phase === "timeout_t" || phase.phase === "timeout_ct")
           ? "show"
           : ""
       } ${
@@ -23,7 +25,8 @@ const Timeout = ({ phase, map }: IProps) => {
           : ""
       }`}
     >
-      {team.name} TIMEOUT
+      <div className={team.side}>{team.name}&nbsp;</div>
+      <div>TIME OUT</div>
     </div>
   );
 };

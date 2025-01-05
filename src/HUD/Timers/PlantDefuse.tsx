@@ -14,14 +14,16 @@ const getCaption = (type: "defusing" | "planting", player: Player | null) => {
     return (
       <>
         <I.Defuse height={22} width={22} fill="var(--color-new-ct)" />
-        <div className={"CT"}>{player.name} is defusing the bomb</div>
+        <div>{player.name}&nbsp;</div>
+        <div className={"CT"}>is defusing</div>
       </>
     );
   }
   return (
     <>
       <I.SmallBomb height={22} fill="var(--color-new-t)" />
-      <div className={"T"}>{player.name} is planting the bomb</div>
+      <div>{player.name}&nbsp;</div>
+      <div className={"T"}> is planting</div>
     </>
   );
 };

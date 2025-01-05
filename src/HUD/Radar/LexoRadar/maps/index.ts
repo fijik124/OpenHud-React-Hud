@@ -8,7 +8,7 @@ import de_nuke from "./de_nuke";
 import de_vertigo from "./de_vertigo";
 import de_ancient from "./de_ancient";
 import de_anubis from "./de_anubis";
-import api from "../../../../API";
+// import api from "../../../../API";
 import { Player } from "csgogsi";
 
 export type ZoomAreas = {
@@ -57,17 +57,17 @@ const maps: { [key: string]: MapConfig } = {
   de_anubis,
 };
 
-api.maps
-  .get()
-  .then((fallbackMaps) => {
-    const mapNames = Object.keys(fallbackMaps);
-    for (const mapName of mapNames) {
-      if (mapName in maps) {
-        continue;
-      }
-      maps[mapName] = fallbackMaps[mapName];
-    }
-  })
-  .catch(() => {});
+// api.maps
+//   .get()
+//   .then((fallbackMaps) => {
+//     const mapNames = Object.keys(fallbackMaps);
+//     for (const mapName of mapNames) {
+//       if (mapName in maps) {
+//         continue;
+//       }
+//       maps[mapName] = fallbackMaps[mapName];
+//     }
+//   })
+//   .catch(() => {});
 
 export default maps;

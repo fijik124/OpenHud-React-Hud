@@ -1,9 +1,9 @@
 .boxes {
   position: fixed;
-  bottom: 430px;
+  bottom: 460px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
 }
 .boxes.left {
   left: 10px;
@@ -38,7 +38,7 @@
   opacity: 0;
 }
 .sidebox {
-  width: 300px;
+  width: 258px;
   height: 70px;
   display: flex;
   flex-direction: row;
@@ -73,7 +73,7 @@
   }
 }
 .utilitybox {
-  width: 300px;
+  width: 258px;
   height: 70px;
   display: flex;
   flex-direction: row;
@@ -81,24 +81,9 @@
   transition: all 0.75s;
   background-color: var(--sub-panel-color);
   flex-direction: column;
-  .title_container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    font-weight: 600;
-    font-size: 16px;
-    height: 24px;
-  }
-  .title {
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  border-radius: var(--border-radius);
   .grenades_container {
     display: flex;
-
     flex: 1;
     height: 46px;
     .grenade_container {
@@ -109,6 +94,7 @@
       font-weight: 600;
       font-size: 18px;
       justify-content: center;
+      gap: 4px;
 
       svg {
         height: 30px;
@@ -116,9 +102,19 @@
       }
     }
   }
+  &.T {
+    .grenade_container svg {
+      fill: var(--color-new-t);
+    }
+  }
+  &.CT {
+    .grenade_container svg {
+      fill: var(--color-new-ct);
+    }
+  }
 }
 .moneybox {
-  width: 300px;
+  width: 258px;
   height: 70px;
   display: flex;
   flex-direction: row;
@@ -127,20 +123,22 @@
   background-color: var(--sub-panel-color);
   font-weight: 600;
   margin-bottom: 0px;
+  border-radius: var(--border-radius);
   .money_container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     flex: 1;
     color: white;
     .title {
-      height: 25px;
       display: flex;
       align-items: flex-end;
-      font-size: 16px;
+      font-size: 14px;
       justify-content: center;
+      text-transform: uppercase;
+      font-weight: 700;
     }
     .value {
-      flex: 1;
       display: flex;
       align-items: center;
       font-size: 18px;
@@ -148,17 +146,17 @@
     }
   }
   .loss_container {
-    width: 4px;
+    width: 12%;
+    gap: 4px;
     display: flex;
+    flex-direction: column-reverse;
     align-items: center;
-    flex-direction: column;
     justify-content: center;
     .loss-box {
-      height: 13px;
-      width: 100%;
+      height: 10px;
+      width: 10px;
+      border-radius: 10px;
       background-color: #515254;
-      margin-top: 1px;
-      margin-bottom: 1px;
     }
     .loss-box.active.CT {
       background-color: var(--color-new-ct);

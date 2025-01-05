@@ -17,8 +17,6 @@ import Timeout from "../PauseTimeout/Timeout";
 import { CSGO } from "csgogsi";
 import { Match } from "../../API/types";
 import { useAction } from "../../API/contexts/actions";
-// import { Scout } from "../Scout";
-
 interface Props {
   game: CSGO;
   match: Match | null;

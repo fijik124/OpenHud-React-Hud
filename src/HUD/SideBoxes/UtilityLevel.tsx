@@ -48,14 +48,15 @@ function utilityColor(amount: number) {
 
 function sum(grenades: WeaponRaw[], name: string) {
   return (
-    grenades.filter((grenade) => grenade.name === name).reduce(
-      (prev, next) => ({
-        ...next,
-        ammo_reserve: (prev.ammo_reserve || 0) + (next.ammo_reserve || 0),
-      }),
-      { name: "", ammo_reserve: 0 },
-    )
-      .ammo_reserve || 0
+    grenades
+      .filter((grenade) => grenade.name === name)
+      .reduce(
+        (prev, next) => ({
+          ...next,
+          ammo_reserve: (prev.ammo_reserve || 0) + (next.ammo_reserve || 0),
+        }),
+        { name: "", ammo_reserve: 0 }
+      ).ammo_reserve || 0
   );
 }
 
@@ -63,8 +64,8 @@ function parseGrenades(players: Player[], side: Side) {
   const grenades = players
     .filter((player) => player.team.side === side)
     .map((player) =>
-      Object.values(player.weapons).filter((weapon) =>
-        weapon.type === "Grenade"
+      Object.values(player.weapons).filter(
+        (weapon) => weapon.type === "Grenade"
       )
     )
     .flat()
@@ -85,9 +86,13 @@ export function summarise(players: Player[], side: Side) {
   };
 }
 
-const GrenadeContainer = (
-  { grenade, amount }: { grenade: string; amount: number },
-) => {
+const GrenadeContainer = ({
+  grenade,
+  amount,
+}: {
+  grenade: string;
+  amount: number;
+}) => {
   return (
     <div className="grenade_container">
       <div className="grenade_image">
@@ -100,15 +105,14 @@ const GrenadeContainer = (
 
 const SideBox = ({ players, side, show }: Props) => {
   const grenades = summarise(players, side);
-  const total = Object.values(grenades).reduce((a, b) => a + b, 0);
   return (
     <div className={`utilitybox ${side || ""} ${show ? "show" : "hide"}`}>
-      <div className="title_container">
+      {/* <div className="title_container">
         <div className="title">Utility Level -&nbsp;</div>
         <div className="subtitle" style={{ color: utilityColor(total) }}>
           {utilityState(total)}
         </div>
-      </div>
+      </div> */}
       <div className="grenades_container">
         <GrenadeContainer grenade="smokegrenade" amount={grenades.smokes} />
         <GrenadeContainer

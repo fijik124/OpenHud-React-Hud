@@ -30,7 +30,7 @@ const TeamScore = ({ orientation, timer, team }: IProps) => {
 
   return (
     <>
-      <div className={`team ${orientation} ${team.side || ""}`}>
+      <div className={`team ${orientation}`}>
         <div className="team-name">{team?.name || null}</div>
         <TeamLogo team={team} />
       </div>

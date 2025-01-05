@@ -10,7 +10,7 @@
   font-size: 13px;
   .veto_container {
     display: flex;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: var(--sub-panel-color);
     color: white;
     align-items: center;
     height: 40px;
@@ -25,14 +25,14 @@
     .veto_map_name {
       width: 116px;
       text-transform: uppercase;
-      background-color: rgba(255, 255, 255, 1);
-      color: black;
+      background-color: var(--main-panel-color);
       height: 100%;
       display: flex;
       font-family: Montserrat;
       font-weight: 700;
       align-items: center;
       justify-content: center;
+      border-bottom-left-radius: var(--border-radius);
     }
     div {
       img {
@@ -55,8 +55,8 @@
       align-items: center;
       justify-content: center;
       .active {
-        background: white;
-        color: black;
+        background: var(--border-color);
+        color: var(--primary-light);
         width: 117px;
         height: 25px;
         display: flex;
@@ -83,17 +83,20 @@
       align-items: center;
       justify-content: center;
     }
+    &:last-child {
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+    }
   }
   .title_bar {
     display: flex;
-    background-color: rgba(0, 0, 0, 0.64);
+    background-color: var(--sub-panel-color);
     height: 25px;
     color: white;
-    border-radius: 6px 6px 0 0;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
     font-family: Montserrat;
     font-size: 13px;
     font-weight: 600;
-    margin-bottom: 2px;
+    border-bottom: 2px solid var(--border-color);
     div {
       width: 77px;
       display: flex;
@@ -116,6 +119,7 @@
   transform: translateX(-50%);
   top: 150px;
   background-color: var(--sub-panel-color);
+  border-radius: var(--border-radius);
   width: 600px;
   display: flex;
   align-items: center;
@@ -125,6 +129,13 @@
   font-weight: 600;
   transition: opacity 1.5s;
   opacity: 0;
+  color: white;
+  .CT {
+    color: var(--color-new-ct);
+  }
+  .T {
+    color: var(--color-new-t);
+  }
 }
 #pause {
   text-transform: uppercase;
@@ -133,6 +144,7 @@
   transform: translateX(-50%);
   top: 150px;
   background-color: var(--sub-panel-color);
+  border-radius: var(--border-radius);
   width: 600px;
   display: flex;
   align-items: center;
@@ -147,10 +159,4 @@
 #timeout.show,
 #pause.show {
   opacity: 1;
-}
-#timeout.t {
-  color: var(--color-new-t);
-}
-#timeout.ct {
-  color: var(--color-new-ct);
 }
