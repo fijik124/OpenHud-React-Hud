@@ -1,7 +1,6 @@
 import { useState } from "react";
 import TeamBox from "./../Players/TeamBox";
 import MatchBar from "../MatchBar/MatchBar";
-import SeriesBox from "../MatchBar/SeriesBox";
 import Observed from "./../Players/Observed";
 import RadarMaps from "./../Radar/RadarMaps";
 import Trivia from "../Trivia/Trivia";
@@ -12,8 +11,6 @@ import Killfeed from "../Killfeed/Killfeed";
 import MapSeries from "../MapSeries/MapSeries";
 // import Overview from "../Overview/Overview";
 // import Tournament from "../Tournament/Tournament";
-import Pause from "../PauseTimeout/Pause";
-import Timeout from "../PauseTimeout/Timeout";
 import { CSGO } from "csgogsi";
 import { Match } from "../../API/types";
 import { useAction } from "../../API/contexts/actions";
@@ -61,7 +58,7 @@ const Layout = ({ game, match }: Props) => {
   return (
     <div className="layout">
       <div className={`players_alive`}>
-        <div className="title_container">Players alive</div>
+        <div className="title_container">Sponsors:</div>
         <div className="counter_container">
           <div className={`team_counter ${left.side}`}>
             {leftPlayers.filter((player) => player.state.health > 0).length}
@@ -81,9 +78,6 @@ const Layout = ({ game, match }: Props) => {
         bomb={game.bomb}
         match={match}
       />
-      <Pause phase={game.phase_countdowns} />
-      <Timeout map={game.map} phase={game.phase_countdowns} />
-      <SeriesBox map={game.map} match={match} />
 
       {/* <Tournament /> */}
 

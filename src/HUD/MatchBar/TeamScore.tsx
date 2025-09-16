@@ -10,9 +10,10 @@ interface IProps {
   orientation: "left" | "right";
   timer: Timer | null;
   team: I.Team;
+  timeout: boolean;
 }
 
-const TeamScore = ({ orientation, timer, team }: IProps) => {
+const TeamScore = ({ orientation, timer, team, timeout }: IProps) => {
   const [show, setShow] = useState(false);
 
   ONGSI(
@@ -31,8 +32,8 @@ const TeamScore = ({ orientation, timer, team }: IProps) => {
   return (
     <>
       <div className={`team ${orientation}`}>
-        <div className="team-name">{team?.name || null}</div>
         <TeamLogo team={team} />
+        <div className={`team-name ${orientation}`}>{timeout === true ? ("TIMEOUT") : (team?.name || null)}</div>
       </div>
       <PlantDefuse timer={timer} side={orientation} />
       <WinAnnouncement team={team} show={show} />

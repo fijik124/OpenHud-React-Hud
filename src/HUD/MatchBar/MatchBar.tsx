@@ -35,7 +35,7 @@ export interface Timer {
 const getRoundLabel = (mapRound: number) => {
   const round = mapRound + 1;
   if (round <= 24) {
-    return `Round ${round}`;
+    return `Round ${round} / 24`;
   }
   const additionalRounds = round - 24;
   const OT = Math.ceil(additionalRounds / 6);
@@ -43,7 +43,13 @@ const getRoundLabel = (mapRound: number) => {
 };
 const Matchbar = (props: IProps) => {
   const { bomb, match, map, phase } = props;
+  const amountOfMaps =
+    (match && Math.floor(Number(match.matchType.substr(-1)) / 2) + 1) || 0;
   const time = stringToClock(phase.phase_ends_in);
+  const pause = phase && phase.phase === "paused";
+  const TimeoutT = phase && phase.phase === "timeout_t";
+  const TimeoutCT = phase && phase.phase === "timeout_ct";
+  const Timeout = TimeoutT || TimeoutCT;
   const left = map.team_ct.orientation === "left" ? map.team_ct : map.team_t;
   const right = map.team_ct.orientation === "left" ? map.team_t : map.team_ct;
   const isPlanted =
@@ -74,28 +80,68 @@ const Matchbar = (props: IProps) => {
 
   return (
     <>
-      <div id={`matchbar`}>
-        <TeamScore
-          team={left}
-          orientation={"left"}
-          timer={left.side === "CT" ? defuseTimer : plantTimer}
-        />
-        <div className={`score left ${left.side}`}>{left.score}</div>
-        <div id="timer" className={bo === 0 ? "no-bo" : ""}>
-          <div id={`round_timer_text`} className={isPlanted ? "hide" : ""}>
-            {time}
+      <div>
+        <div id={`matchbar`}>
+          <TeamScore
+            team={left}
+            orientation={"left"}
+            timer={left.side === "CT" ? defuseTimer : plantTimer}
+            timeout={TimeoutCT}
+          />
+          <div className="wins_box_container left">
+            <div className="wins_box_flex">
+              {new Array(amountOfMaps).fill(0).map((_, i) => (
+                <div
+                  key={i}
+                  className={`wins_box ${
+                    left.matches_won_this_series > i ? "win" : ""
+                  } ${left.side}`}
+                />
+              ))}
+            </div>
+
+            <div className={`score right ${left.side}`}>{left.score}</div>
           </div>
-          <div id="round_now" className={isPlanted ? "hide" : ""}>
-            {getRoundLabel(map.round)}
+          <div id="timer" className={bo === 0 ? "no-bo" : ""}>
+            <div id="round_now" className={isPlanted ? "hide" : ""}>
+              {getRoundLabel(map.round)}
+            </div>
+            {pause ? (
+              <div id="pause_timer">PAUSED</div>
+            ) : (
+              time > "0" && (
+                <div
+                  id={`round_timer_text`}
+                  className={isPlanted ? "hide" : ""}
+                >
+                  {time}
+                </div>
+              )
+            )}
+
+            <Bomb />
           </div>
-          <Bomb />
+          <div className="wins_box_container right">
+            <div className="wins_box_flex">
+              {new Array(amountOfMaps).fill(0).map((_, i) => (
+                <div
+                  key={i}
+                  className={`wins_box ${
+                    right.matches_won_this_series > i ? "win" : ""
+                  } ${right.side}`}
+                />
+              ))}
+            </div>
+
+            <div className={`score right ${right.side}`}>{right.score}</div>
+          </div>
+          <TeamScore
+            team={left}
+            orientation={"right"}
+            timer={left.side === "CT" ? defuseTimer : plantTimer}
+            timeout={TimeoutT}
+          />
         </div>
-        <div className={`score right ${right.side}`}>{right.score}</div>
-        <TeamScore
-          team={right}
-          orientation={"right"}
-          timer={right.side === "CT" ? defuseTimer : plantTimer}
-        />
       </div>
     </>
   );
