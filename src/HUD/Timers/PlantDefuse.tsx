@@ -14,17 +14,21 @@ const getCaption = (type: "defusing" | "planting", player: Player | null) => {
   if (type === "defusing") {
     return (
       <>
-        <I.Defuse height={22} width={22} fill="white" />
-        <div>{player.name}&nbsp;</div>
-        <div>DEFUSING</div>
+        <div className="player-name">{player.name}</div>
+        <div className="action-row">
+          <I.Defuse height={18} width={18} fill="white" />
+          <div>DEFUSING</div>
+        </div>
       </>
     );
   }
   return (
     <>
-      <I.SmallBomb height={22} fill="white" />
-      <div>{player.name}&nbsp;</div>
-      <div>PLANTING</div>
+      <div className="player-name">{player.name}</div>
+      <div className="action-row">
+        <I.SmallBomb height={18} fill="white" />
+        <div>PLANTING</div>
+      </div>
     </>
   );
 };

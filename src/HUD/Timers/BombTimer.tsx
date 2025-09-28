@@ -27,9 +27,11 @@ const Bomb = ({ fullWidth = false, side = "right" }: IProps = {}) => {
           }}
         ></div>
         <div className="bomb-timer-content">
-          <C4 fill="white" />
-          <div>BOMB</div>
-          <div>{Math.ceil(bombData.bombTime)}s</div>
+          <div className="player-name">BOMB</div>
+          <div className="action-row">
+            <C4 fill="white" />
+            <div>{Math.ceil(bombData.bombTime)}s</div>
+          </div>
         </div>
       </div>
     );
