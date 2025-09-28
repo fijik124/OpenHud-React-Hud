@@ -237,13 +237,13 @@
       .expanding-color-bar.planting {
         background-color: var(--color-new-t);
         left: 0;
-        width: 100% !important; // Override the dynamic width to fill entire area
+        // Width is set dynamically by the component based on progress
       }
       
       .expanding-color-bar.defusing {
         background-color: var(--color-new-ct);
         left: 0;
-        width: 100% !important; // Override the dynamic width to fill entire area
+        // Width is set dynamically by the component based on progress
       }
       
       .bomb-countdown-bar {
