@@ -1,7 +1,7 @@
 import * as I from "csgogsi";
 import "./matchbar.scss";
 import TeamScore from "./TeamScore";
-import Bomb from "./../Timers/BombTimer";
+
 import { useBombTimer } from "./../Timers/Countdown";
 import { Match } from "./../../API/types";
 
@@ -23,6 +23,8 @@ interface IProps {
   map: I.Map;
   phase: I.CSGO["phase_countdowns"];
   bomb: I.Bomb | null;
+  leftTeam?: I.Team;
+  rightTeam?: I.Team;
 }
 
 export interface Timer {
@@ -32,6 +34,7 @@ export interface Timer {
   type: "defusing" | "planting";
   player: I.Player | null;
 }
+
 const getRoundLabel = (mapRound: number) => {
   const round = mapRound + 1;
   if (round <= 24) {
@@ -41,8 +44,9 @@ const getRoundLabel = (mapRound: number) => {
   const OT = Math.ceil(additionalRounds / 6);
   return `OT ${OT} (${additionalRounds - (OT - 1) * 6}/6)`;
 };
+
 const Matchbar = (props: IProps) => {
-  const { bomb, match, map, phase } = props;
+  const { bomb, match, map, phase, leftTeam, rightTeam } = props;
   const amountOfMaps =
     (match && Math.floor(Number(match.matchType.substr(-1)) / 2) + 1) || 0;
   const time = stringToClock(phase.phase_ends_in);
@@ -50,13 +54,35 @@ const Matchbar = (props: IProps) => {
   const TimeoutT = phase && phase.phase === "timeout_t";
   const TimeoutCT = phase && phase.phase === "timeout_ct";
   const Timeout = TimeoutT || TimeoutCT;
-  const left = map.team_ct.orientation === "left" ? map.team_ct : map.team_t;
-  const right = map.team_ct.orientation === "left" ? map.team_t : map.team_ct;
+  // Create fallback team mapping only if teams aren't provided from parent
+  const getTeamBySide = (targetSide: "left" | "right") => {
+    // Try to match with match data first (persistent assignment)
+    if (match) {
+      if (targetSide === "left") {
+        // Find which current team corresponds to the match's left team
+        return map.team_ct.id === match.left.id ? map.team_ct : map.team_t;
+      } else {
+        // Find which current team corresponds to the match's right team
+        return map.team_ct.id === match.right.id ? map.team_ct : map.team_t;
+      }
+    }
+    
+    // Fallback to orientation-based assignment if no match data
+    return targetSide === "left" 
+      ? (map.team_ct.orientation === "left" ? map.team_ct : map.team_t)
+      : (map.team_ct.orientation === "left" ? map.team_t : map.team_ct);
+  };
+
+  // Use passed teams with current sides from Layout (preferred) or fallback to local detection
+  const left = leftTeam || getTeamBySide("left");
+  const right = rightTeam || getTeamBySide("right");
+  
   const isPlanted =
     bomb && (bomb.state === "defusing" || bomb.state === "planted");
   const bo = (match && Number(match.matchType.substr(-1))) || 0;
 
   const bombData = useBombTimer();
+  // const bombPlanted = bombData.state === "planted" || bombData.state === "defusing"; // Unused variable removed for cleaner code
   const plantTimer: Timer | null =
     bombData.state === "planting"
       ? {
@@ -100,7 +126,8 @@ const Matchbar = (props: IProps) => {
               ))}
             </div>
 
-            <div className={`score right ${left.side}`}>{left.score}</div>
+            {/* MODIFIED: Removed 'right' class from score to keep site layout but only use CT/T for color */}
+            <div className={`score ${left.side}`}>{left.score}</div>
           </div>
           <div id="timer" className={bo === 0 ? "no-bo" : ""}>
             <div id="round_now" className={isPlanted ? "hide" : ""}>
@@ -119,7 +146,7 @@ const Matchbar = (props: IProps) => {
               )
             )}
 
-            <Bomb />
+            
           </div>
           <div className="wins_box_container right">
             <div className="wins_box_flex">
@@ -133,14 +160,17 @@ const Matchbar = (props: IProps) => {
               ))}
             </div>
 
+            {/* MODIFIED: Kept 'right' class and kept CT/T for color */}
             <div className={`score right ${right.side}`}>{right.score}</div>
           </div>
+          <div>
           <TeamScore
-            team={left}
+            team={right}
             orientation={"right"}
-            timer={left.side === "CT" ? defuseTimer : plantTimer}
+            timer={right.side === "T" ? plantTimer : defuseTimer}
             timeout={TimeoutT}
           />
+          </div>
         </div>
       </div>
     </>

@@ -1,7 +1,7 @@
 {
-  "name": "OpenHud CS2 Default HUD",
+  "name": "Early Off's Hud",
   "version": "1.0.1",
-  "author": "John Timmermann",
+  "author": "Fijik",
   "legacy": false,
   "radar": true,
   "killfeed": false,

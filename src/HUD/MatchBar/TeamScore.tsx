@@ -5,6 +5,8 @@ import PlantDefuse from "../Timers/PlantDefuse";
 import { ONGSI } from "../../API/contexts/actions";
 import WinAnnouncement from "./WinIndicator";
 import { useState } from "react";
+import Bomb from "./../Timers/BombTimer";
+import { useBombTimer } from "./../Timers/Countdown";
 
 interface IProps {
   orientation: "left" | "right";
@@ -29,13 +31,59 @@ const TeamScore = ({ orientation, timer, team, timeout }: IProps) => {
     [orientation]
   );
 
+  const isPlantingOrDefusing = timer?.active && timer?.player;
+  const bombData = useBombTimer();
+
+  // Determine what to display based on game state and team side
+  const renderContent = (team: any, orientation: any) => {
+    // Show bomb countdown timer if bomb is planted and this is the T side
+    if (bombData.state === "planted" && team.side === "T") {
+      return (
+        <div className={`team-name ${orientation} ${team.side} bomb-countdown`}>
+          <Bomb fullWidth={true} side={orientation} />
+        </div>
+      );
+    }
+    // Show defuse progress if someone is defusing and this is the CT side
+    else if (bombData.state === "defusing" && team.side === "CT") {
+      return (
+        <div className={`team-name ${orientation} ${team.side} defusing`}>
+          <PlantDefuse timer={timer} side={orientation} fullWidth={true} />
+        </div>
+      );
+    }
+    // Show plant/defuse progress for the team performing the action
+    else if (isPlantingOrDefusing) {
+      if (timer?.type === "planting" && team.side === "T") {
+        return (
+          <div className={`team-name ${orientation} ${team.side} planting`}>
+            <PlantDefuse timer={timer} side={orientation} fullWidth={true} />
+          </div>
+        );
+      }
+      else if (timer?.type === "defusing" && team.side === "CT") {
+        return (
+          <div className={`team-name ${orientation} ${team.side} defusing`}>
+            <PlantDefuse timer={timer} side={orientation} fullWidth={true} />
+          </div>
+        );
+      }
+    }
+    
+    // Default to showing the team name or timeout message
+    return (
+      <div className={`team-name ${orientation} ${team.side}`}>
+        {timeout === true ? "TIMEOUT" : team?.name || null}
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={`team ${orientation}`}>
         <TeamLogo team={team} />
-        <div className={`team-name ${orientation}`}>{timeout === true ? ("TIMEOUT") : (team?.name || null)}</div>
+        {renderContent(team, orientation)}
       </div>
-      <PlantDefuse timer={timer} side={orientation} />
       <WinAnnouncement team={team} show={show} />
     </>
   );

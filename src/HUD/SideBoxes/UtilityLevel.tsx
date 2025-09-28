@@ -61,8 +61,8 @@ function sum(grenades: WeaponRaw[], name: string) {
 }
 
 function parseGrenades(players: Player[], side: Side) {
+  // Players are already filtered by the parent component, no need to filter by side again
   const grenades = players
-    .filter((player) => player.team.side === side)
     .map((player) =>
       Object.values(player.weapons).filter(
         (weapon) => weapon.type === "Grenade"

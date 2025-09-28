@@ -21,7 +21,7 @@
   flex-direction: row;
   position: fixed;
   justify-content: center;
-  width: 860px;
+  width: 950px;
   height: 80px;
   top: 15px;
   left: 50%;
@@ -47,7 +47,7 @@
   #timer {
     display: flex;
     flex-direction: column;
-    width: 126px;
+    width: 100px;
     height: 80px;
     background-color: var(--sub-panel-color);
     border-left: 2px solid var(--border-color-separator);
@@ -69,42 +69,64 @@
     border-top: 2px solid var(--border-color-separator);
   }
   #bomb_container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    .bomb_timer {
-      width: 100%;
-      top: 0;
-      height: 0;
-      background-color: var(--color-bomb);
-      &.hide {
-        display: none;
-      }
-    }
-    .bomb_icon {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      svg {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 6px;
-        max-height: 80%;
-        max-width: 80%;
-      }
-      &.hide {
-        display: none;
-      }
-    }
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bomb_timer {
+  right: 0;
+  height: 87px;
+  background-color: var(--color-bomb);
+}
+
+.bomb_timer.hide {
+  display: none;
+}
+
+.bomb_icon {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.bomb_icon svg {
+  position: absolute;
+  left: 20%;
+  transform: translateX(-50%);
+  top: 6px;
+  max-height: 80%;
+  max-width: 80%;
+}
+
+.bomb_icon.hide {
+  display: none;
+}
+
+.bomb_text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--white-full);
+  left: 75%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.bomb_text.hide {
+  display: none;
+}
   #round_timer_text {
     display: flex;
     width: 100%;
@@ -141,7 +163,7 @@
     .logo {
       display: flex;
       flex-direction: row;
-      width: 200px;
+      width: 150px;
       height: 80px;
       align-items: center;
       overflow: hidden;
@@ -169,7 +191,7 @@
   }
   .team-name {
     display: flex;
-    width: 360px;
+    width: 450px;
     height: 80px;
     align-items: center;
     justify-content: center;
@@ -177,11 +199,86 @@
     font-size: 28px;
     color: white;
     background-color: var(--sub-panel-color);
-    &.left {
+    position: relative;
+    overflow: hidden;
+    
+    &.left.CT {
       border-left: 10px solid var(--color-new-ct);
     }
-    &.right {
+    &.left.T {
+      border-left: 10px solid var(--color-new-t);
+    }
+    &.right.CT {
+      border-right: 10px solid var(--color-new-ct);
+    }
+    &.right.T {
       border-right: 10px solid var(--color-new-t);
+    }
+    
+    // Full width plant/defuse/bomb timer styles
+    .plant-defuse-fullwidth, .bomb-timer-fullwidth {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      .expanding-color-bar, .bomb-countdown-bar {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: width 0.1s ease-out;
+        z-index: 1;
+      }
+      
+      .expanding-color-bar.planting {
+        background-color: var(--color-new-t);
+        left: 50%;
+        transform-origin: left center;
+      }
+      
+      .expanding-color-bar.defusing {
+        background-color: var(--color-new-ct);
+        right: 50%;
+        transform-origin: right center;
+      }
+      
+      .bomb-countdown-bar {
+        background-color: #ff4444;
+        transform-origin: right center;
+      }
+      
+      // When T team is on left side - bomb expands from left to center
+      &.left .bomb-countdown-bar {
+        left: 0;
+        transform-origin: left center;
+      }
+      
+      // When T team is on right side - bomb expands from right to center  
+      &.right .bomb-countdown-bar {
+        right: 0;
+        transform-origin: right center;
+      }
+      
+      .plant-defuse-content, .bomb-timer-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
+        text-transform: uppercase;
+        
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
     }
   }
   .score {
@@ -204,6 +301,61 @@
     }
     &.T {
       background-color: var(--color-new-t);
+    }
+  }
+  .defuse_plant_container {
+    position: fixed;
+    display: flex;
+    opacity: 1;
+    width: 300px;
+    height: 50px;
+    align-items: center;
+    color: white;
+    justify-content: center;
+    background-color: var(--sub-panel-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    .defuse_plant_bar {
+      height: 49px;
+      position: absolute;
+      width: 0%;
+      transition: width 0.1s ease-out;
+      
+      &.planting {
+        background-color: var(--color-new-t);
+      }
+      
+      &.defusing {
+        background-color: var(--color-new-ct);
+      }
+      
+      // Fallback color
+      background-color: var(--border-color);
+    }
+    .defuse_plant_caption {
+      z-index: 1;
+      display: flex;
+      text-transform: uppercase;
+      font-weight: 600;
+      align-items: flex-end;
+      svg {
+        margin-right: 13px;
+      }
+    }
+    &.right {
+      left: calc(50% + 97px);
+      .defuse_plant_bar {
+        left: 0;
+      }
+    }
+    &.left {
+      right: calc(50% + 97px);
+      .defuse_plant_bar {
+        right: 0;
+      }
+    }
+    &.hide {
+      opacity: 0;
     }
   }
 }
@@ -231,52 +383,6 @@
   }
   &.left {
     right: calc(50% + 97px);
-  }
-}
-
-.defuse_plant_container {
-  position: fixed;
-  display: flex;
-  opacity: 1;
-  width: 300px;
-  height: 50px;
-  top: 82px;
-  align-items: center;
-  color: white;
-  justify-content: center;
-  background-color: var(--sub-panel-color);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  .defuse_plant_bar {
-    height: 49px;
-    background-color: var(--border-color);
-    position: absolute;
-    width: 0%;
-  }
-  .defuse_plant_caption {
-    z-index: 1;
-    display: flex;
-    text-transform: uppercase;
-    font-weight: 600;
-    align-items: flex-end;
-    svg {
-      margin-right: 13px;
-    }
-  }
-  &.right {
-    left: calc(50% + 97px);
-    .defuse_plant_bar {
-      left: 0;
-    }
-  }
-  &.left {
-    right: calc(50% + 97px);
-    .defuse_plant_bar {
-      right: 0;
-    }
-  }
-  &.hide {
-    opacity: 0;
   }
 }
 #encapsulator {

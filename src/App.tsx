@@ -24,18 +24,8 @@ const App = () => {
             return;
           }
           setCurrentMatch(match);
-          let isReversed = false;
-          if (GSI.last) {
-            const mapName = GSI.last.map.name.substring(
-              GSI.last.map.name.lastIndexOf("/") + 1
-            );
-            const current = match.vetos.filter(
-              (veto) => veto.mapName === mapName
-            )[0];
-            if (current && current.reverseSide) {
-              isReversed = true;
-            }
-          }
+          
+          // Teams stay persistent on their designated sides regardless of CT/T status
           if (match.left.id) {
             api.teams.getTeam(match.left.id).then((left) => {
               const gsiTeamData = {
@@ -47,9 +37,8 @@ const App = () => {
                 extra: left.extra,
               };
 
-              if (!isReversed) {
-                GSI.teams.left = gsiTeamData;
-              } else GSI.teams.right = gsiTeamData;
+              // Always assign left team to left side
+              GSI.teams.left = gsiTeamData;
             });
           }
           if (match.right.id) {
@@ -62,8 +51,9 @@ const App = () => {
                 map_score: match.right.wins,
                 extra: right.extra,
               };
-              if (!isReversed) GSI.teams.right = gsiTeamData;
-              else GSI.teams.left = gsiTeamData;
+              
+              // Always assign right team to right side
+              GSI.teams.right = gsiTeamData;
             });
           }
         })
