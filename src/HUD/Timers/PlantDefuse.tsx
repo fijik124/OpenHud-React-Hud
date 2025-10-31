@@ -43,14 +43,25 @@ const PlantDefuse = ({ timer, side, fullWidth = false }: IProps) => {
       ? MAX_TIMER.defuse_kit
       : MAX_TIMER.defuse_nokit);
   
+  // Debug: Log progress for troubleshooting
   if (fullWidth) {
-    // Full width mode for team name replacement
+    console.log(`${timer.type} progress:`, {
+      time: timer.time,
+      maxTimer: timer.type === "planting" ? MAX_TIMER.planting : (timer.player?.state.defusekit ? MAX_TIMER.defuse_kit : MAX_TIMER.defuse_nokit),
+      percentage: progressPercentage
+    });
+  }
+  
+  if (fullWidth) {
+    // Full width mode for team name replacement - using scaleX for smooth animation
+    const scaleValue = progressPercentage / 100; // Convert percentage to 0-1 scale
+    
     return (
       <div className={`plant-defuse-fullwidth ${timer.type} ${side}`}>
         <div 
           className={`expanding-color-bar ${timer.type}`}
           style={{
-            width: `${progressPercentage}%`
+            transform: `scaleX(${scaleValue})`
           }}
         ></div>
         <div className="plant-defuse-content">

@@ -234,16 +234,36 @@
         z-index: 1;
       }
       
+      // Modular progress bars - using transform scaleX for smooth animation like bomb countdown
+      .expanding-color-bar {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%; // Full width, but scaled down to 0
+        transform: scaleX(0); // Start at 0 scale
+        transition: transform 0.1s ease-out;
+        z-index: 1;
+      }
+      
+      // Planting and defusing - both start from center and expand toward team side
       .expanding-color-bar.planting {
         background-color: var(--color-new-t);
-        left: 0;
-        // Width is set dynamically by the component based on progress
       }
       
       .expanding-color-bar.defusing {
         background-color: var(--color-new-ct);
-        left: 0;
-        // Width is set dynamically by the component based on progress
+      }
+      
+      // When team is on LEFT side - expand from center to left
+      &.left .expanding-color-bar {
+        right: 0%; // Position at center
+        transform-origin: right center; // Scale from center toward left
+      }
+      
+      // When team is on RIGHT side - expand from center to right  
+      &.right .expanding-color-bar {
+        right: 0%; // Position at center
+        transform-origin: left; // Scale from center toward right
       }
       
       .bomb-countdown-bar {
